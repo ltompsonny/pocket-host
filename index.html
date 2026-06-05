@@ -144,6 +144,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .manage-item .del-btn:hover { color: #c0392b; }
 .manage-item.default-item .del-btn { opacity: 0; pointer-events: none; }
 </style>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/pocket-host/sw.js').then(function(reg) {
+        // Check for updates every time app is opened
+        reg.update();
+        // When a new version is found, reload automatically
+        reg.addEventListener('updatefound', function() {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', function() {
+            if (newWorker.state === 'activated') {
+              window.location.reload();
+            }
+          });
+        });
+      });
+    });
+  }
+</script>
 </head>
 <body>
 
